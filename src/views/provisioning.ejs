@@ -11,6 +11,7 @@
         <p class="text-3xl font-bold text-cyan-400 mt-1"><%= channelCount %></p>
       </div>
       <form method="POST" action="/approvisionnement/synchroniser">
+        <%- include('partials/csrf') %>
         <button type="submit" class="btn-primary" <%= channelCount === 0 ? 'disabled' : '' %>>
           ⚙️ Synchroniser maintenant
         </button>

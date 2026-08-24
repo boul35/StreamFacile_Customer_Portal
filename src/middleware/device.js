@@ -31,33 +31,22 @@ function classifyUserAgent(ua) {
 async function ensureDevice(customerId, token, req) {
   const ua = req.headers["user-agent"] || "";
   const { type, platform } = classifyUserAgent(ua);
+  const deviceName = `Appareil ${platform}`;
 
   const { rows } = await pool.query(
-    `INSERT INTO devices (customer_id, device_name, device_type, platform, app_version, last_active_at)
-     VALUES ($1, $2, $3, $4, $5, now())
-     ON CONFLICT DO NOTHING
+    `INSERT INTO devices (customer_id, device_token, device_name, device_type, platform, app_version, last_active_at)
+     VALUES ($1, $2, $3, $4, $5, $6, now())
+     ON CONFLICT (customer_id, device_token)
+     DO UPDATE SET
+       last_active_at = now(),
+       device_name = EXCLUDED.device_name,
+       device_type = EXCLUDED.device_type,
+       platform = EXCLUDED.platform
      RETURNING id`,
-    [customerId, `Appareil ${platform}`, type, platform, req.headers["x-app-version"] || "web"]
+    [customerId, token, deviceName, type, platform, req.headers["x-app-version"] || "web"]
   );
 
-  let deviceId = rows[0] ? rows[0].id : null;
-
-  if (!deviceId) {
-    const found = await pool.query(
-      `SELECT id FROM devices WHERE customer_id = $1 AND device_name = $2 LIMIT 1`,
-      [customerId, `Appareil ${platform}`]
-    );
-    deviceId = found.rows[0] ? found.rows[0].id : null;
-  }
-
-  if (deviceId) {
-    await pool.query(
-      `UPDATE devices SET last_active_at = now() WHERE id = $1`,
-      [deviceId]
-    );
-  }
-
-  return deviceId;
+  return rows[0].id;
 }
 
 function deviceTracker(req, res, next) {

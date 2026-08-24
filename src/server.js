@@ -1,5 +1,8 @@
+const env = require("./config/env");
 const app = require("./app");
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`StreamFacile démarré sur http://localhost:${process.env.PORT || 3000}`);
+env.validate();
+
+app.listen(env.port, () => {
+  console.log(`StreamFacile démarré sur http://localhost:${env.port} (env: ${env.nodeEnv})`);
 });

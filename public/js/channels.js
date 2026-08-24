@@ -20,6 +20,8 @@
     const channelId = btn.getAttribute("data-channel-id");
     const max = parseInt(btn.getAttribute("data-limit"), 10);
     const card = grid.querySelector('[data-channel-id="' + channelId + '"]');
+    const csrf = document.getElementById("csrf-token");
+    const csrfValue = csrf ? csrf.value : "";
 
     btn.disabled = true;
     btn.textContent = "…";
@@ -29,7 +31,11 @@
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
       },
-      body: "channelId=" + encodeURIComponent(channelId)
+      body:
+        "channelId=" +
+        encodeURIComponent(channelId) +
+        "&_csrf=" +
+        encodeURIComponent(csrfValue)
     })
       .then(function (r) {
         return r.json().then(function (data) {

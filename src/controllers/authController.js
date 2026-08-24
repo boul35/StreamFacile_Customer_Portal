@@ -12,7 +12,11 @@ const registerValidators = [
   body("phone").optional({ checkFalsy: true }).isLength({ max: 40 }),
   body("password")
     .isLength({ min: 8 })
-    .withMessage("Le mot de passe doit contenir au moins 8 caractères"),
+    .withMessage("Le mot de passe doit contenir au moins 8 caractères.")
+    .matches(/[A-Za-z]/)
+    .withMessage("Le mot de passe doit contenir au moins une lettre.")
+    .matches(/\d/)
+    .withMessage("Le mot de passe doit contenir au moins un chiffre."),
   body("plan").optional().isString()
 ];
 

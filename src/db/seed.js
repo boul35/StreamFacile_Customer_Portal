@@ -41,9 +41,11 @@ async function seed() {
   console.log("[seed] client de démonstration créé: demo@streamfacile.qc.ca / streamfacile123");
 }
 
-seed()
-  .then(() => pool.end())
-  .catch((err) => {
+module.exports = { seed };
+
+if (require.main === module) {
+  seed().catch((err) => {
     console.error("[seed] échec:", err.message);
     process.exit(1);
   });
+}

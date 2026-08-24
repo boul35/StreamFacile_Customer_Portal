@@ -19,6 +19,7 @@
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <div class="card p-5 lg:col-span-2 space-y-6">
       <form method="POST" action="/compte/profil" class="space-y-4">
+        <%- include('partials/csrf') %>
         <h2 class="text-lg font-semibold text-slate-100">Profil</h2>
         <div>
           <label class="label" for="name">Nom complet</label>
@@ -38,6 +39,7 @@
       <hr class="border-slate-700" />
 
       <form method="POST" action="/compte/mot-de-passe" class="space-y-4">
+        <%- include('partials/csrf') %>
         <h2 class="text-lg font-semibold text-slate-100">Changer le mot de passe</h2>
         <div>
           <label class="label" for="currentPassword">Mot de passe actuel</label>

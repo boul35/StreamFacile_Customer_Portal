@@ -92,6 +92,10 @@ const passwordValidators = [
   body("newPassword")
     .isLength({ min: 8 })
     .withMessage("Le nouveau mot de passe doit contenir au moins 8 caractères.")
+    .matches(/[A-Za-z]/)
+    .withMessage("Le nouveau mot de passe doit contenir au moins une lettre.")
+    .matches(/\d/)
+    .withMessage("Le nouveau mot de passe doit contenir au moins un chiffre."),
 ];
 
 async function changePassword(req, res) {

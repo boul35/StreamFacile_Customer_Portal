@@ -9,6 +9,7 @@
   <% } %>
 
   <form method="POST" action="/inscription" class="space-y-4">
+    <%- include('partials/csrf') %>
     <div>
       <label class="label" for="name">Nom complet</label>
       <input class="input" type="text" id="name" name="name" value="<%= values.name || '' %>" required />

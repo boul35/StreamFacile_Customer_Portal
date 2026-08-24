@@ -18,6 +18,7 @@
 
   <div class="card p-5">
     <form method="POST" action="/support/creer" class="space-y-4">
+        <%- include('partials/csrf') %>
       <div>
         <label class="label" for="channelId">Chaîne concernée (facultatif)</label>
         <select class="input" id="channelId" name="channelId">

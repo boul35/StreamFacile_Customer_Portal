@@ -9,6 +9,7 @@
   <% } %>
 
   <form method="POST" action="/connexion" class="space-y-4">
+    <%- include('partials/csrf') %>
     <div>
       <label class="label" for="email">Courriel</label>
       <input class="input" type="email" id="email" name="email" value="<%= values.email || '' %>" required />
