@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= typeof title !== 'undefined' ? title : 'StreamFacile' %></title>
+  <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body class="min-h-screen flex flex-col">
+  <% if (typeof customerName !== 'undefined' && customerName) { %>
+    <%- include('partials/nav') %>
+  <% } %>
+  <main class="flex-1 w-full max-w-6xl mx-auto px-4 py-6">
+    <% if (typeof flash !== 'undefined' && flash) { %>
+      <div class="mb-4 rounded-lg px-4 py-3 text-sm font-medium
+        <%= flash.type === 'error' ? 'bg-rose-900/40 text-rose-200 border border-rose-700' : 'bg-emerald-900/40 text-emerald-200 border border-emerald-700' %>">
+        <%= flash.message %>
+      </div>
+    <% } %>
+    <%- body %>
+  </main>
+  <footer class="w-full max-w-6xl mx-auto px-4 py-6 text-xs text-slate-500">
+    StreamFacile — Votre service de diffusion IPTV, en toute simplicité. © <%= new Date().getFullYear() %>
+  </footer>
+</body>
+</html>

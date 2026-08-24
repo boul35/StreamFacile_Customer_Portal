@@ -1,0 +1,61 @@
+<section class="space-y-5">
+  <header>
+    <h1 class="text-2xl font-bold text-cyan-400">Centre d'aide</h1>
+    <p class="text-slate-400 text-sm">Signalez un problème. Nous recueillons automatiquement le contexte technique utile.</p>
+  </header>
+
+  <% if (typeof envoye !== 'undefined' && envoye) { %>
+    <div class="rounded-lg bg-emerald-900/40 border border-emerald-700 text-emerald-200 text-sm px-4 py-3">
+      Merci! Votre billet <strong><%= envoye %></strong> a bien été transmis à notre équipe.
+    </div>
+  <% } %>
+
+  <% if (errors && errors.length) { %>
+    <ul class="rounded-lg bg-rose-900/40 border border-rose-700 text-rose-200 text-sm px-3 py-2">
+      <% errors.forEach(function(e){ %><li><%= e.msg %></li><% }); %>
+    </ul>
+  <% } %>
+
+  <div class="card p-5">
+    <form method="POST" action="/support/creer" class="space-y-4">
+      <div>
+        <label class="label" for="channelId">Chaîne concernée (facultatif)</label>
+        <select class="input" id="channelId" name="channelId">
+          <option value="">— Aucune / ne s'applique pas —</option>
+          <% (channels || []).forEach(function(c){ %>
+            <option value="<%= c.id %>" <%= prefillChannel && String(prefillChannel) === String(c.id) ? 'selected' : '' %>>
+              <%= c.name %> (<%= c.category %>)
+            </option>
+          <% }); %>
+        </select>
+      </div>
+
+      <div>
+        <label class="label" for="deviceId">Appareil concerné (facultatif)</label>
+        <select class="input" id="deviceId" name="deviceId">
+          <option value="">— Tous les appareils —</option>
+          <% (devices || []).forEach(function(d){ %>
+            <option value="<%= d.id %>"><%= d.device_name %> — <%= d.platform %></option>
+          <% }); %>
+        </select>
+      </div>
+
+      <div>
+        <label class="label" for="subject">Sujet</label>
+        <input class="input" type="text" id="subject" name="subject" value="<%= values.subject || '' %>" placeholder="ex. La chaîne RDS ne se charge pas" required />
+      </div>
+
+      <div>
+        <label class="label" for="description">Description du problème</label>
+        <textarea class="input" id="description" name="description" rows="5" required placeholder="Décrivez le problème en détail…"><%= values.description || '' %></textarea>
+      </div>
+
+      <div class="rounded-lg bg-slate-900 border border-slate-700 p-3 text-xs text-slate-400">
+        🔒 Contexte capturé automatiquement à l'envoi : profil client, forfait, appareil et chaîne concernés.
+        Aucune clé d'accès n'est incluse.
+      </div>
+
+      <button type="submit" class="btn-primary">Envoyer le billet</button>
+    </form>
+  </div>
+</section>

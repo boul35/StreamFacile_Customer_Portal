@@ -1,0 +1,85 @@
+<section class="space-y-5">
+  <header>
+    <h1 class="text-2xl font-bold text-cyan-400">Mon compte</h1>
+    <p class="text-slate-400 text-sm">Gérez votre profil, votre abonnement et vos appareils.</p>
+  </header>
+
+  <% if (typeof notice !== 'undefined' && notice) { %>
+    <div class="rounded-lg bg-emerald-900/40 border border-emerald-700 text-emerald-200 text-sm px-4 py-3">
+      <%= notice %>
+    </div>
+  <% } %>
+
+  <% if (errors && errors.length) { %>
+    <ul class="rounded-lg bg-rose-900/40 border border-rose-700 text-rose-200 text-sm px-3 py-2">
+      <% errors.forEach(function(e){ %><li><%= e.msg %></li><% }); %>
+    </ul>
+  <% } %>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="card p-5 lg:col-span-2 space-y-6">
+      <form method="POST" action="/compte/profil" class="space-y-4">
+        <h2 class="text-lg font-semibold text-slate-100">Profil</h2>
+        <div>
+          <label class="label" for="name">Nom complet</label>
+          <input class="input" type="text" id="name" name="name" value="<%= values.name || customer.name %>" required />
+        </div>
+        <div>
+          <label class="label" for="email">Courriel</label>
+          <input class="input" type="email" id="email" name="email" value="<%= values.email || customer.email %>" required />
+        </div>
+        <div>
+          <label class="label" for="phone">Téléphone</label>
+          <input class="input" type="tel" id="phone" name="phone" value="<%= values.phone || customer.phone || '' %>" placeholder="ex. 418 555-0101" />
+        </div>
+        <button type="submit" class="btn-primary">Enregistrer le profil</button>
+      </form>
+
+      <hr class="border-slate-700" />
+
+      <form method="POST" action="/compte/mot-de-passe" class="space-y-4">
+        <h2 class="text-lg font-semibold text-slate-100">Changer le mot de passe</h2>
+        <div>
+          <label class="label" for="currentPassword">Mot de passe actuel</label>
+          <input class="input" type="password" id="currentPassword" name="currentPassword" required />
+        </div>
+        <div>
+          <label class="label" for="newPassword">Nouveau mot de passe</label>
+          <input class="input" type="password" id="newPassword" name="newPassword" required />
+          <p class="text-xs text-slate-500 mt-1">Au moins 8 caractères.</p>
+        </div>
+        <button type="submit" class="btn-ghost">Mettre à jour le mot de passe</button>
+      </form>
+    </div>
+
+    <div class="space-y-6">
+      <div class="card p-5">
+        <h2 class="text-lg font-semibold text-slate-100 mb-3">Abonnement</h2>
+        <p class="text-sm text-slate-400">Forfait</p>
+        <p class="text-xl font-bold text-cyan-400"><%= customer.plan_name %></p>
+        <div class="mt-3 space-y-1 text-sm">
+          <div class="flex justify-between"><span class="text-slate-400">Chaînes</span><span class="text-slate-200"><%= selectedChannels %> / <%= customer.max_channels %></span></div>
+          <div class="flex justify-between"><span class="text-slate-400">Renouvellement</span><span class="text-slate-200"><%= new Date(customer.renewal_date).toLocaleDateString('fr-CA') %></span></div>
+        </div>
+        <a href="/chaines" class="btn-ghost w-full mt-4 text-sm">Gérer mes chaînes</a>
+      </div>
+
+      <div class="card p-5">
+        <h2 class="text-lg font-semibold text-slate-100 mb-3">Appareils enregistrés</h2>
+        <% if (!devices.length) { %>
+          <p class="text-sm text-slate-500">Aucun appareil enregistré.</p>
+        <% } else { %>
+          <ul class="space-y-3">
+            <% devices.forEach(function(d){ %>
+              <li class="border-b border-slate-700 pb-2 last:border-0">
+                <p class="text-sm font-medium text-slate-200"><%= d.device_name %></p>
+                <p class="text-xs text-slate-500"><%= d.device_type %> · <%= d.platform %></p>
+                <p class="text-xs text-slate-600">Vu <%= d.last_active_at ? new Date(d.last_active_at).toLocaleString('fr-CA') : 'jamais' %></p>
+              </li>
+            <% }); %>
+          </ul>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</section>

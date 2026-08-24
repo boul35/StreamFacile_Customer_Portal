@@ -1,0 +1,70 @@
+<section class="space-y-5">
+  <header>
+    <h1 class="text-2xl font-bold text-cyan-400">Catalogue de chaînes</h1>
+    <p class="text-slate-400 text-sm">Choisissez vos chaînes. Votre forfait limite le nombre de chaînes.</p>
+  </header>
+
+  <div class="card p-4">
+    <div class="flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
+      <div class="flex items-center gap-2">
+        <span class="text-sm text-slate-300">Votre sélection:</span>
+        <span id="count-badge" class="badge bg-cyan-500/20 text-cyan-300 border border-cyan-700">
+          <%= selected %> / <%= maxChannels %>
+        </span>
+        <span id="remaining-badge" class="text-xs text-slate-500"><%= remaining %> restantes</span>
+      </div>
+      <form method="GET" action="/chaines" class="flex items-center gap-2 w-full sm:w-auto">
+        <input class="input" type="search" name="recherche" value="<%= search %>" placeholder="Rechercher une chaîne…" />
+        <button class="btn-ghost" type="submit">Rechercher</button>
+      </form>
+    </div>
+
+    <div class="flex flex-wrap gap-2 mt-4">
+      <% categories.forEach(function(cat){ %>
+        <a href="/chaines?categorie=<%= encodeURIComponent(cat) %><%= search ? '&recherche=' + encodeURIComponent(search) : '' %>"
+           class="badge px-3 py-1.5 <%= cat === activeCategory ? 'bg-cyan-500 text-slate-900' : 'bg-slate-700 text-slate-300 hover:bg-slate-600' %>">
+          <%= cat %>
+        </a>
+      <% }); %>
+    </div>
+  </div>
+
+  <% if (atLimit) { %>
+    <div class="rounded-lg bg-amber-900/40 border border-amber-700 text-amber-200 text-sm px-4 py-3">
+      Vous avez atteint votre limite de <%= maxChannels %> chaînes. Retirez une chaîne pour en ajouter une nouvelle.
+    </div>
+  <% } %>
+
+  <% if (!channels.length) { %>
+    <p class="text-slate-500 text-center py-10">Aucune chaîne ne correspond à votre recherche.</p>
+  <% } else { %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="channel-grid">
+      <% channels.forEach(function(ch){ %>
+        <div class="card p-4 flex items-center justify-between gap-3" data-channel-id="<%= ch.id %>" data-selected="<%= ch.selected %>">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-10 h-10 rounded-lg bg-slate-700 flex items-center justify-center text-cyan-400 font-bold shrink-0">
+              <%= ch.name.charAt(0) %>
+            </div>
+            <div class="min-w-0">
+              <p class="font-medium text-slate-100 truncate"><%= ch.name %></p>
+              <p class="text-xs text-slate-500"><%= ch.category %> · <%= ch.language.toUpperCase() %></p>
+            </div>
+          </div>
+          <button type="button"
+                  class="toggle-btn shrink-0 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors
+                         <%= ch.selected ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-700' : 'bg-slate-700 text-slate-200 hover:bg-slate-600' %>"
+                  data-channel-id="<%= ch.id %>"
+                  data-limit="<%= maxChannels %>">
+            <%= ch.selected ? '✓ Ajoutée' : 'Ajouter' %>
+          </button>
+        </div>
+      <% }); %>
+    </div>
+  <% } %>
+
+  <div class="flex justify-end">
+    <a href="/approvisionnement" class="btn-primary">Synchroniser ma sélection →</a>
+  </div>
+</section>
+
+<script src="/js/channels.js"></script>

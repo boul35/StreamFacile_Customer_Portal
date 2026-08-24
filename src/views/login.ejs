@@ -1,0 +1,27 @@
+<div class="max-w-md mx-auto mt-10 card p-6">
+  <h1 class="text-2xl font-bold text-cyan-400 mb-1">Connexion</h1>
+  <p class="text-slate-400 text-sm mb-6">Accédez à votre espace StreamFacile.</p>
+
+  <% if (errors && errors.length) { %>
+    <ul class="mb-4 rounded-lg bg-rose-900/40 border border-rose-700 text-rose-200 text-sm px-3 py-2">
+      <% errors.forEach(function(e){ %><li><%= e.msg %></li><% }); %>
+    </ul>
+  <% } %>
+
+  <form method="POST" action="/connexion" class="space-y-4">
+    <div>
+      <label class="label" for="email">Courriel</label>
+      <input class="input" type="email" id="email" name="email" value="<%= values.email || '' %>" required />
+    </div>
+    <div>
+      <label class="label" for="password">Mot de passe</label>
+      <input class="input" type="password" id="password" name="password" required />
+    </div>
+    <button type="submit" class="btn-primary w-full">Se connecter</button>
+  </form>
+
+  <p class="text-sm text-slate-400 mt-6 text-center">
+    Pas encore de compte?
+    <a href="/inscription" class="text-cyan-400 hover:underline">Créer un compte</a>
+  </p>
+</div>

@@ -1,0 +1,48 @@
+<section class="space-y-5">
+  <header>
+    <h1 class="text-2xl font-bold text-cyan-400">Approvisionnement</h1>
+    <p class="text-slate-400 text-sm">Envoyez votre sélection de chaînes vers Dispatcharr en toute sécurité.</p>
+  </header>
+
+  <div class="card p-5">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <p class="text-slate-300">Chaînes prêtes à synchroniser</p>
+        <p class="text-3xl font-bold text-cyan-400 mt-1"><%= channelCount %></p>
+      </div>
+      <form method="POST" action="/approvisionnement/synchroniser">
+        <button type="submit" class="btn-primary" <%= channelCount === 0 ? 'disabled' : '' %>>
+          ⚙️ Synchroniser maintenant
+        </button>
+      </form>
+    </div>
+    <p class="text-xs text-slate-500 mt-4">
+      Vos identifiants Dispatcharr restent sur nos serveurs et ne sont jamais transmis à votre navigateur.
+    </p>
+  </div>
+
+  <div class="card p-5">
+    <h2 class="text-lg font-semibold text-slate-100 mb-3">Historique des synchronisations</h2>
+    <% if (!jobs.length) { %>
+      <p class="text-sm text-slate-500">Aucune synchronisation effectuée pour le moment.</p>
+    <% } else { %>
+      <ul class="divide-y divide-slate-700">
+        <% jobs.forEach(function(j){ %>
+          <li class="py-3 flex items-center justify-between gap-3">
+            <div>
+              <p class="text-sm text-slate-200">#<%= j.id %> — <%= j.selected_channels %> chaîne(s)</p>
+              <p class="text-xs text-slate-500"><%= new Date(j.created_at).toLocaleString('fr-CA') %></p>
+              <% if (j.error_message) { %><p class="text-xs text-rose-400"><%= j.error_message %></p><% } %>
+            </div>
+            <span class="badge
+              <%= j.status === 'reussi' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-700' :
+                  j.status === 'echec' ? 'bg-rose-500/20 text-rose-300 border border-rose-700' :
+                  'bg-slate-700 text-slate-300' %>">
+              <%= j.status %>
+            </span>
+          </li>
+        <% }); %>
+      </ul>
+    <% } %>
+  </div>
+</section>
